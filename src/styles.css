@@ -1,0 +1,206 @@
+:root {
+  color-scheme: light;
+  --phrase-ink: #17211d;
+  --phrase-muted: #66736c;
+  --phrase-line: #d9ded7;
+  --phrase-red: #c93d3d;
+  --phrase-red-bg: #ffe5e1;
+  --phrase-green: #17845a;
+  --phrase-green-bg: #ddf4e8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f6f7f4;
+  color: var(--phrase-ink);
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+.appFrame {
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(246, 247, 244, 0.94)),
+    #f6f7f4;
+}
+
+.workspaceGrid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(380px, 1.34fr) minmax(300px, 0.94fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.toolPanel {
+  min-height: calc(100vh - 132px);
+  overflow: hidden;
+}
+
+.panelStack {
+  height: 100%;
+}
+
+.panelHeader,
+.panelFooter {
+  min-height: 58px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--phrase-line);
+}
+
+.panelFooter {
+  border-top: 1px solid var(--phrase-line);
+  border-bottom: 0;
+}
+
+.sourceTextarea {
+  min-height: calc(100vh - 248px);
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  background: #fcfdfb;
+  line-height: 1.58;
+}
+
+.readingScroll,
+.phraseScroll {
+  flex: 1;
+  min-height: 0;
+}
+
+.sentenceBlock {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--phrase-line);
+}
+
+.sentenceBlock:first-child {
+  padding-top: 0;
+}
+
+.sentenceBlock:last-child {
+  border-bottom: 0;
+}
+
+.sentenceText {
+  margin-top: 8px;
+  font-size: 19px;
+  line-height: 1.85;
+}
+
+.translationText {
+  margin-top: 12px;
+  color: #39443f;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.mark {
+  display: inline;
+  border: 0;
+  border-radius: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  cursor: pointer;
+  padding: 1px 3px 2px;
+  text-underline-offset: 4px;
+  transition:
+    background 140ms ease,
+    color 140ms ease;
+}
+
+.mark-red {
+  background: var(--phrase-red-bg);
+  color: #7d1f1f;
+  text-decoration: underline solid var(--phrase-red) 2px;
+}
+
+.mark-green {
+  background: var(--phrase-green-bg);
+  color: #0d5d3f;
+  text-decoration: underline wavy var(--phrase-green) 1.4px;
+}
+
+.mark-active {
+  color: #fff;
+}
+
+.mark-red.mark-active {
+  background: var(--phrase-red);
+}
+
+.mark-green.mark-active {
+  background: var(--phrase-green);
+}
+
+.libraryPanel {
+  padding: 12px;
+  border-bottom: 1px solid var(--phrase-line);
+  background: #fbfcfb;
+}
+
+.mutedIcon {
+  color: var(--phrase-muted);
+  flex: 0 0 auto;
+}
+
+.phraseCard {
+  width: 100%;
+  display: block;
+  text-align: left;
+  border: 1px solid var(--phrase-line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 12px;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+.phraseCard:hover,
+.phraseCard-active {
+  border-color: #9daaa2;
+  background: #f9fbf9;
+}
+
+.phraseCard-active {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1100px) {
+  .workspaceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .toolPanel {
+    min-height: auto;
+  }
+
+  .sourceTextarea {
+    min-height: 280px;
+  }
+
+  .readingScroll,
+  .phraseScroll {
+    max-height: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .sentenceText {
+    font-size: 17px;
+  }
+
+  .panelHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
