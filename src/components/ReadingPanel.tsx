@@ -1,13 +1,30 @@
-import { Badge, Box, Group, Paper, ScrollArea, Stack, Text, Title, Tooltip } from "@mantine/core";
+import {
+  Badge,
+  Box,
+  Group,
+  Paper,
+  ScrollArea,
+  Stack,
+  Text,
+  Textarea,
+  Title,
+  Tooltip,
+} from "@mantine/core";
 import type { PhraseMark, ReadingAnalysis, SentenceAnalysis } from "../domain/parser";
 
 type ReadingPanelProps = {
   activePhraseId: string | null;
   analysis: ReadingAnalysis;
   onSelectPhrase: (id: string) => void;
+  onUpdateTranslation: (sentenceId: string, translation: string) => void;
 };
 
-export function ReadingPanel({ activePhraseId, analysis, onSelectPhrase }: ReadingPanelProps) {
+export function ReadingPanel({
+  activePhraseId,
+  analysis,
+  onSelectPhrase,
+  onUpdateTranslation,
+}: ReadingPanelProps) {
   return (
     <Paper className="toolPanel" withBorder>
       <Stack className="panelStack" gap={0}>
@@ -30,6 +47,7 @@ export function ReadingPanel({ activePhraseId, analysis, onSelectPhrase }: Readi
                   activePhraseId={activePhraseId}
                   sentence={sentence}
                   onSelectPhrase={onSelectPhrase}
+                  onUpdateTranslation={onUpdateTranslation}
                 />
               ))
             )}
@@ -42,10 +60,12 @@ export function ReadingPanel({ activePhraseId, analysis, onSelectPhrase }: Readi
 
 function SentenceBlock({
   activePhraseId,
+  onUpdateTranslation,
   sentence,
   onSelectPhrase,
 }: {
   activePhraseId: string | null;
+  onUpdateTranslation: (sentenceId: string, translation: string) => void;
   sentence: SentenceAnalysis;
   onSelectPhrase: (id: string) => void;
 }) {
@@ -62,7 +82,18 @@ function SentenceBlock({
           onSelectPhrase={onSelectPhrase}
         />
       </Box>
-      <Text className="translationText">{sentence.translation}</Text>
+      <Text c="dimmed" className="translationLabel" fw={800} size="xs">
+        中文翻译
+      </Text>
+      <Textarea
+        aria-label={`Sentence ${sentence.index + 1} Chinese translation`}
+        autosize
+        classNames={{ input: "translationInput" }}
+        minRows={2}
+        placeholder="补充这句话的中文译文"
+        value={sentence.translation}
+        onChange={(event) => onUpdateTranslation(sentence.id, event.currentTarget.value)}
+      />
     </Box>
   );
 }

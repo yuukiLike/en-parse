@@ -95,11 +95,16 @@ textarea {
   line-height: 1.85;
 }
 
-.translationText {
+.translationLabel {
   margin-top: 12px;
+  margin-bottom: 5px;
+}
+
+.translationInput {
   color: #39443f;
   font-size: 15px;
   line-height: 1.6;
+  background: #fbfcfb;
 }
 
 .mark {

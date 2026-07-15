@@ -14,7 +14,13 @@ import {
   saveReadingSession,
   type PhraseLensLibrary,
 } from "./domain/library";
-import { analyzeReading, buildNotes, getReadingTitle, type ReadingAnalysis } from "./domain/parser";
+import {
+  analyzeReading,
+  buildNotes,
+  getReadingTitle,
+  updateSentenceTranslation,
+  type ReadingAnalysis,
+} from "./domain/parser";
 import { loadLibrary, persistLibrary } from "./services/libraryStorage";
 import {
   exportLibraryCsv,
@@ -66,6 +72,12 @@ export function App() {
     setSourceText("");
     setAnalysis(analyzeReading("", phraseRules, sampleTranslations));
     setActivePhraseId(null);
+  }
+
+  function handleUpdateTranslation(sentenceId: string, translation: string) {
+    setAnalysis((currentAnalysis) =>
+      updateSentenceTranslation(currentAnalysis, sentenceId, translation),
+    );
   }
 
   function handleSaveSession() {
@@ -146,6 +158,7 @@ export function App() {
               analysis={analysis}
               activePhraseId={activePhraseId}
               onSelectPhrase={setActivePhraseId}
+              onUpdateTranslation={handleUpdateTranslation}
             />
             <MemoryPanel
               activePhraseId={activePhraseId}

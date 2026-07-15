@@ -32,7 +32,7 @@ export type ReadingAnalysis = {
   phrases: PhraseMark[];
 };
 
-const fallbackTranslation = "离线版先提供短语高亮；这里可以接入翻译 API 或粘贴你自己的参考译文。";
+const fallbackTranslation = "";
 
 export function normalizeSpaces(value: string) {
   return value.replace(/[ \t\n]+/g, " ").trim();
@@ -114,6 +114,32 @@ export function analyzeReading(
   };
 }
 
+export function updateSentenceTranslation(
+  analysis: ReadingAnalysis,
+  sentenceId: string,
+  translation: string,
+): ReadingAnalysis {
+  const targetSentence = analysis.sentences.find((sentence) => sentence.id === sentenceId);
+  if (!targetSentence) return analysis;
+
+  return {
+    sentences: analysis.sentences.map((sentence) => {
+      if (sentence.id !== sentenceId) return sentence;
+
+      return {
+        ...sentence,
+        translation,
+        marks: sentence.marks.map((mark) => ({ ...mark, translation })),
+      };
+    }),
+    phrases: analysis.phrases.map((phrase) =>
+      phrase.sentenceIndex === targetSentence.index
+        ? { ...phrase, translation }
+        : phrase,
+    ),
+  };
+}
+
 export function getReadingTitle(text: string) {
   const firstLine = text
     .split(/\n+/)
@@ -128,7 +154,10 @@ export function buildNotes(phrases: PhraseMark[]) {
   return phrases
     .map((phrase) => {
       const tag = phrase.color === "red" ? "短语" : "结构";
-      return `- [${tag}] ${phrase.text}: ${phrase.meaning}`;
+      const lines = [`- [${tag}] ${phrase.text}: ${phrase.meaning}`];
+      lines.push(`  - 例句: ${phrase.sentenceText}`);
+      if (phrase.translation) lines.push(`  - 翻译: ${phrase.translation}`);
+      return lines.join("\n");
     })
     .join("\n");
 }

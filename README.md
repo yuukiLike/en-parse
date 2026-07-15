@@ -13,8 +13,23 @@ The current app uses `pnpm`, Vite, React, TypeScript, Mantine, and lucide icons.
 - Save the current reading session into a local library.
 - Save copied notes as portable memories.
 - Keep a local wordbook in browser storage.
+- Add or edit a Chinese translation for every sentence without leaving the local app.
 - Export the library as JSON, Markdown, or CSV.
 - Import a JSON library backup and merge it with local data.
+
+## Product Flow
+
+```mermaid
+flowchart LR
+  Capture["Paste English"] --> Analyze["Analyze phrases"]
+  Analyze --> Read["Read red and green highlights"]
+  Read --> Translate["Add Chinese translation"]
+  Translate --> Save["Save to local library"]
+  Save --> Export["Export JSON / Markdown / CSV"]
+  Export --> Sync["Move or back up with iCloud Drive"]
+```
+
+Translations are editable local data. Phrase Lens does not require a translation API for the core reading and memory loop.
 
 ## Product Direction
 
