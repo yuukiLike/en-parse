@@ -9,7 +9,6 @@ import {
   Stack,
   Text,
   Title,
-  Tooltip,
   UnstyledButton,
 } from "@mantine/core";
 import {
@@ -58,21 +57,17 @@ export function MemoryPanel({
         <Group className="panelHeader" justify="space-between">
           <Title order={2}>Remember</Title>
           <Group gap="xs">
-            <Tooltip label="保存当前阅读">
-              <Button leftSection={<Save size={16} />} size="sm" variant="light" onClick={onSaveSession}>
-                保存本次
-              </Button>
-            </Tooltip>
-            <Tooltip label="复制并保存笔记">
-              <Button
-                leftSection={<ClipboardCopy size={16} />}
-                size="sm"
-                variant="default"
-                onClick={onCopyNotes}
-              >
-                复制笔记
-              </Button>
-            </Tooltip>
+            <Button leftSection={<Save size={16} />} size="sm" variant="light" onClick={onSaveSession}>
+              保存本次
+            </Button>
+            <Button
+              leftSection={<ClipboardCopy size={16} />}
+              size="sm"
+              variant="default"
+              onClick={onCopyNotes}
+            >
+              复制笔记
+            </Button>
           </Group>
         </Group>
         <Box className="libraryPanel">

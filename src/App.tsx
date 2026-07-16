@@ -27,6 +27,7 @@ import {
   exportLibraryJson,
   exportLibraryMarkdown,
 } from "./utils/exporters";
+import { getCopyNotesFeedback } from "./utils/notificationFeedback";
 
 const initialAnalysis = analyzeReading(sampleText, phraseRules, sampleTranslations);
 
@@ -42,17 +43,23 @@ export function App() {
 
   const libraryStats = useMemo(() => getLibraryStats(library), [library]);
 
-  function commitLibrary(nextLibrary: PhraseLensLibrary, message: string) {
+  function commitLibrary(
+    nextLibrary: PhraseLensLibrary,
+    message: string,
+    showNotification = true,
+  ) {
     try {
       persistLibrary(nextLibrary);
       setLibrary(nextLibrary);
       setLibraryStatus(message);
-      notifications.show({ color: "teal", message });
+      if (showNotification) notifications.show({ color: "teal", message });
+      return true;
     } catch {
       setLibrary(nextLibrary);
       const fallback = "当前浏览器没有开放本地存储；请先导出 JSON 保留这次内容。";
       setLibraryStatus(fallback);
-      notifications.show({ color: "red", message: fallback });
+      if (showNotification) notifications.show({ color: "red", message: fallback });
+      return false;
     }
   }
 
@@ -104,14 +111,15 @@ export function App() {
       getReadingTitle(sourceText),
       analysis.phrases.length,
     );
-    commitLibrary(nextLibrary, "已保存为可迁移的本地记忆。");
+    const persisted = commitLibrary(nextLibrary, "已保存为可迁移的本地记忆。", false);
+    let copied = false;
 
     try {
       await navigator.clipboard.writeText(noteText);
-      notifications.show({ color: "teal", message: "笔记已复制到剪贴板。" });
-    } catch {
-      notifications.show({ color: "yellow", message: "浏览器未开放剪贴板权限，但记忆已保存。" });
-    }
+      copied = true;
+    } catch {}
+
+    notifications.show(getCopyNotesFeedback({ copied, persisted }));
   }
 
   function handleExportJson() {
