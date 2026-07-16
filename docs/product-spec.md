@@ -24,6 +24,8 @@ Primary first surface because it is the cheapest way to support Mac and iOS.
 The PWA should support:
 
 - Paste text and parse it.
+- Preserve, select, and navigate natural paragraphs.
+- Read a selected paragraph aloud with local system voices, adjustable speed, and sentence-level follow-along highlighting.
 - Save phrases and sentence memories.
 - Import and export the library package.
 - Save a local backup file.
@@ -167,6 +169,7 @@ V1 should not require:
 - Custom sync server.
 - Background worker service.
 - Subscription billing infrastructure.
+- Hosted text-to-speech for the core listening flow.
 
 Optional AI cost should be user-visible and controllable:
 

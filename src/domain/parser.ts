@@ -22,12 +22,21 @@ export type PhraseMark = {
 export type SentenceAnalysis = {
   id: string;
   index: number;
+  paragraphIndex: number;
   text: string;
   translation: string;
   marks: PhraseMark[];
 };
 
+export type ParagraphAnalysis = {
+  id: string;
+  index: number;
+  text: string;
+  sentenceIds: string[];
+};
+
 export type ReadingAnalysis = {
+  paragraphs: ParagraphAnalysis[];
   sentences: SentenceAnalysis[];
   phrases: PhraseMark[];
 };
@@ -47,6 +56,14 @@ export function splitSentences(text: string) {
   if (!compact) return [];
 
   return compact.match(/[^.!?。！？]+(?:[.!?。！？]+|$)/g)?.map((item) => item.trim()) ?? [compact];
+}
+
+export function splitParagraphs(text: string) {
+  return text
+    .replace(/\r\n?/g, "\n")
+    .split(/\n[ \t]*\n+/)
+    .map(normalizeSpaces)
+    .filter(Boolean);
 }
 
 function getTranslation(sentence: string, translations: Map<string, string>) {
@@ -89,26 +106,41 @@ export function analyzeReading(
   rules: PhraseRule[],
   translations: Map<string, string>,
 ): ReadingAnalysis {
-  const sentences = splitSentences(text).map<SentenceAnalysis>((sentence, sentenceIndex) => {
-    const translation = getTranslation(sentence, translations);
-    const marks = findMatches(sentence, rules).map<PhraseMark>((match, matchIndex) => ({
-      ...match,
-      id: `s${sentenceIndex}-p${matchIndex}-${match.start}`,
-      sentenceIndex,
-      sentenceText: sentence,
-      translation,
-    }));
+  const sentences: SentenceAnalysis[] = [];
+  const paragraphs = splitParagraphs(text).map<ParagraphAnalysis>((paragraph, paragraphIndex) => {
+    const paragraphSentences = splitSentences(paragraph).map((sentence) => {
+      const sentenceIndex = sentences.length;
+      const translation = getTranslation(sentence, translations);
+      const marks = findMatches(sentence, rules).map<PhraseMark>((match, matchIndex) => ({
+        ...match,
+        id: `s${sentenceIndex}-p${matchIndex}-${match.start}`,
+        sentenceIndex,
+        sentenceText: sentence,
+        translation,
+      }));
+      const sentenceAnalysis: SentenceAnalysis = {
+        id: `sentence-${sentenceIndex}`,
+        index: sentenceIndex,
+        paragraphIndex,
+        text: sentence,
+        translation,
+        marks,
+      };
+
+      sentences.push(sentenceAnalysis);
+      return sentenceAnalysis;
+    });
 
     return {
-      id: `sentence-${sentenceIndex}`,
-      index: sentenceIndex,
-      text: sentence,
-      translation,
-      marks,
+      id: `paragraph-${paragraphIndex}`,
+      index: paragraphIndex,
+      text: paragraph,
+      sentenceIds: paragraphSentences.map((sentence) => sentence.id),
     };
   });
 
   return {
+    paragraphs,
     sentences,
     phrases: sentences.flatMap((sentence) => sentence.marks),
   };
@@ -123,6 +155,7 @@ export function updateSentenceTranslation(
   if (!targetSentence) return analysis;
 
   return {
+    paragraphs: analysis.paragraphs,
     sentences: analysis.sentences.map((sentence) => {
       if (sentence.id !== sentenceId) return sentence;
 

@@ -12,6 +12,9 @@ The current app uses `pnpm`, Vite, React, TypeScript, Mantine, and lucide icons.
 ## Current Features
 
 - Paste English and highlight useful phrases and sentence structures.
+- Preserve natural paragraphs so any paragraph can be selected and focused.
+- Read a selected paragraph aloud with local system voices, voice choice, playback speed, pause, resume, stop, and paragraph navigation.
+- Highlight the active sentence and show reading progress without sending speech text to a Phrase Lens server.
 - Save the current reading session into a local library.
 - Save copied notes as portable memories.
 - Keep a local wordbook in browser storage.
@@ -49,7 +52,7 @@ flowchart LR
   linkStyle default stroke:#94a3b8,stroke-width:2px
 ```
 
-Translations are editable local data. Phrase Lens does not require a translation API for the core reading and memory loop.
+Translations are editable local data. Phrase Lens does not require a translation API for the core reading and memory loop. Speech uses the browser Web Speech API and prefers local voices already available on the device, so it does not require a Phrase Lens account, API key, or hosted speech service of its own.
 
 ## Product Direction
 

@@ -7,6 +7,9 @@
   --phrase-red-bg: #ffe5e1;
   --phrase-green: #17845a;
   --phrase-green-bg: #ddf4e8;
+  --phrase-teal: #0d7b68;
+  --phrase-teal-dark: #145044;
+  --phrase-teal-soft: #eaf7f2;
 }
 
 * {
@@ -76,17 +79,232 @@ textarea {
   min-height: 0;
 }
 
-.sentenceBlock {
-  padding: 16px 0;
+.speechPlayer {
+  position: relative;
+  z-index: 2;
+  padding: 13px 16px 12px;
+  border-bottom: 1px solid #cddfd8;
+  background:
+    radial-gradient(circle at 6% 10%, rgba(58, 166, 135, 0.13), transparent 27%),
+    linear-gradient(135deg, #f8fcfa 0%, #eef8f4 100%);
+  box-shadow: 0 8px 22px rgba(35, 75, 63, 0.06);
+}
+
+.speechUnsupported {
+  border: 0;
   border-bottom: 1px solid var(--phrase-line);
+  border-radius: 0;
+}
+
+.speechGlyph {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 13px;
+  background: linear-gradient(145deg, #176b5a, #103f36);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(15, 80, 66, 0.18);
+}
+
+.speechPulse {
+  position: absolute;
+  bottom: 7px;
+  width: 2px;
+  height: 4px;
+  border-radius: 999px;
+  background: #9ae6c9;
+  opacity: 0.75;
+  transform-origin: center bottom;
+}
+
+.speechPulse-one {
+  right: 8px;
+}
+
+.speechPulse-two {
+  right: 12px;
+  height: 7px;
+}
+
+.speechPulse-three {
+  right: 16px;
+  height: 5px;
+}
+
+.speechPlayer-playing .speechPulse {
+  animation: speechPulse 760ms ease-in-out infinite alternate;
+}
+
+.speechPlayer-playing .speechPulse-two {
+  animation-delay: -240ms;
+}
+
+.speechPlayer-playing .speechPulse-three {
+  animation-delay: -440ms;
+}
+
+@keyframes speechPulse {
+  from {
+    transform: scaleY(0.55);
+  }
+  to {
+    transform: scaleY(1.65);
+  }
+}
+
+.speechNowPlaying {
+  min-width: 0;
+}
+
+.speechEyebrow {
+  color: var(--phrase-teal);
+  letter-spacing: 0.075em;
+}
+
+.speechStatus {
+  margin-top: 1px;
+  color: #263b34;
+}
+
+.speechTransport {
+  flex: 0 0 auto;
+}
+
+.speechPlayButton {
+  box-shadow: 0 7px 16px rgba(23, 132, 90, 0.26);
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.speechPlayButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 9px 20px rgba(23, 132, 90, 0.32);
+}
+
+.speechProgress {
+  margin-top: 11px;
+}
+
+.speechSettings {
+  margin-top: 10px;
+}
+
+.voiceSelect {
+  min-width: 0;
+  flex: 1 1 180px;
+}
+
+.voiceSelect input {
+  border-color: #cbdcd5;
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.rateControl {
+  flex: 0 0 auto;
+  border: 1px solid #cbdcd5;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.speechMeta {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.paragraphBlock {
+  overflow: hidden;
+  border: 1px solid #dfe5df;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 2px 8px rgba(40, 55, 47, 0.035);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.paragraphBlock:hover {
+  border-color: #bfcec6;
+}
+
+.paragraphBlock-selected {
+  border-color: #72af9e;
+  box-shadow:
+    0 0 0 2px rgba(23, 132, 90, 0.09),
+    0 8px 22px rgba(37, 90, 73, 0.08);
+  transform: translateY(-1px);
+}
+
+.paragraphHeader {
+  min-height: 42px;
+  padding: 6px 10px 6px 12px;
+  border-bottom: 1px solid #e5eae5;
+  background: #fafcf9;
+}
+
+.paragraphBlock-selected .paragraphHeader {
+  background: linear-gradient(90deg, #edf8f3, #f8fcfa);
+}
+
+.paragraphSelector {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #35453e;
+}
+
+.paragraphCheck {
+  width: 17px;
+  height: 17px;
+  display: inline-grid;
+  place-items: center;
+  border: 1.5px solid #aebbb4;
+  border-radius: 50%;
+  color: #fff;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.paragraphBlock-selected .paragraphCheck {
+  border-color: var(--phrase-teal);
+  background: var(--phrase-teal);
+}
+
+.sentenceBlock {
+  position: relative;
+  margin: 0 12px;
+  padding: 14px 2px 15px;
+  border-bottom: 1px solid #e3e8e3;
+  transition:
+    background 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .sentenceBlock:first-child {
-  padding-top: 0;
+  padding-top: 14px;
 }
 
 .sentenceBlock:last-child {
   border-bottom: 0;
+}
+
+.sentenceBlock-speaking {
+  margin: 0;
+  padding-right: 14px;
+  padding-left: 14px;
+  border-bottom-color: transparent;
+  background: linear-gradient(90deg, rgba(218, 244, 233, 0.88), rgba(245, 251, 248, 0.88));
+  box-shadow: inset 3px 0 0 var(--phrase-teal);
+}
+
+.sentenceBlock-speaking + .sentenceBlock {
+  border-top-color: transparent;
 }
 
 .sentenceText {
@@ -119,6 +337,12 @@ textarea {
   transition:
     background 140ms ease,
     color 140ms ease;
+}
+
+.paragraphBlock-selected .mark:focus-visible,
+.paragraphSelector:focus-visible {
+  outline: 2px solid #52a58d;
+  outline-offset: 3px;
 }
 
 .mark-red {
@@ -199,6 +423,12 @@ textarea {
   }
 }
 
+@media (max-width: 1400px) and (min-width: 1101px) {
+  .speechMeta {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   .sentenceText {
     font-size: 17px;
@@ -207,5 +437,67 @@ textarea {
   .panelHeader {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .speechPlayer {
+    padding: 12px;
+  }
+
+  .speechGlyph {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+  }
+
+  .speechStatus {
+    max-width: 128px;
+    font-size: 12px;
+  }
+
+  .speechTransport {
+    gap: 1px;
+  }
+
+  .speechSettings {
+    flex-wrap: wrap;
+  }
+
+  .voiceSelect {
+    flex-basis: 100%;
+  }
+
+  .rateControl {
+    flex: 1;
+  }
+
+  .speechMeta {
+    display: none;
+  }
+
+  .paragraphHeader {
+    padding-right: 8px;
+    padding-left: 10px;
+  }
+
+  .sentenceBlock {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  .sentenceBlock-speaking {
+    margin-right: 0;
+    margin-left: 0;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .speechPulse,
+  .speechPlayButton,
+  .paragraphBlock,
+  .sentenceBlock {
+    animation: none;
+    transition: none;
   }
 }
